@@ -54,7 +54,9 @@
 
             for (let i = 0; i < images.length; i++)
             {
-                images[i].src = images[i].src + "?cache=" + new Date().getTime();
+                let urlArray = images[i].src.split('?');
+
+                images[i].src = urlArray[0] + "?cache=" + new Date().getTime();
             }
         }
 
