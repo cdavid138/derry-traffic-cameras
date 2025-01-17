@@ -64,14 +64,20 @@
             { "name": "Buncrana Road", "url": "https://cctv.trafficwatchni.com/3286.jpg"},
             { "name": "Caw Roundabout", "url": "https://cctv.trafficwatchni.com/3287.jpg"},
             { "name": "Strand Road", "url": "https://cctv.trafficwatchni.com/3295.jpg"},
-            { "name": "Craigavon Bridge", "url": "https://cctv.trafficwatchni.com/3288.jpg"},
+            // { "name": "Craigavon Bridge", "url": "https://cctv.trafficwatchni.com/3288.jpg"},
             { "name": "Greenhaw/Culmore Road", "url": "https://cctv.trafficwatchni.com/3293.jpg"},
             { "name": "Strand Road", "url": "https://cctv.trafficwatchni.com/3292.jpg"},
             { "name": "Rossdowney Road", "url": "https://cctv.trafficwatchni.com/3294.jpg"},
             { "name": "Dales Corner", "url": "https://cctv.trafficwatchni.com/3290.jpg"},
             { "name": "Culmore Roundabout", "url": "https://cctv.trafficwatchni.com/3289.jpg"},
             { "name": "Belt Road", "url": "https://cctv.trafficwatchni.com/3285.jpg"},
-            { "name": "Drumahoe", "url": "https://cctv.trafficwatchni.com/3291.jpg"},
+            // { "name": "Drumahoe", "url": "https://cctv.trafficwatchni.com/3291.jpg"},
+            { "name": "Ballykelly", "url": "https://cctv.trafficwatchni.com/3284.jpg"},
+            { "name": "Foyle Bridge", "url": "https://cctv.trafficwatchni.com/832-1.jpg"},
+            { "name": "Glenshane Pass", "url": "https://cctv.trafficwatchni.com/821-1.jpg"},
+            { "name": "Coleraine Mountain", "url": "https://cctv.trafficwatchni.com/3239-1.jpg"},
+            { "name": "Toome", "url": "https://cctv.trafficwatchni.com/3256.jpg"},
+            { "name": "Randalstown", "url": "https://cctv.trafficwatchni.com/3255.jpg"},
         ];
 
         document.addEventListener("DOMContentLoaded", function()
@@ -84,11 +90,26 @@
 
             cameras.forEach(function(element, index)
             {
-                insertHTML += '<div onClick="openModal(' + index + ')" class="w-full md:w-1/2 xl:w-1/3 relative"><div class="bg-blue-900 w-full flex flex-row justify-center items-center" style="height: 32px; position: absolute; left: 0; top: 0; color: white; padding: 0.6% 2%;">' + element.name + '</div><img class="w-full h-auto" src="' + element.url + '"></div>';
+                insertHTML += '<div onClick="openModal(' + index + ')" class="w-full md:w-1/2 xl:w-1/3 relative"><div class="bg-blue-900 w-full flex flex-row justify-center items-center" style="height: 32px; position: absolute; left: 0; top: 0; color: white; padding: 0.6% 2%;">' + element.name + '</div><img id="image" class="w-full h-auto" src="' + element.url + '"></div>';
             })
 
             document.getElementById('camera-wrap').innerHTML = insertHTML;
+
+            setTimeout(function() {
+                setDivHeights();
+            }, 100);
         });
+
+        function setDivHeights() {
+            let firstImageHeight = document.getElementById('image').clientHeight;
+
+            let  everyImage = document.querySelectorAll("#image");
+
+            for (let i = 0; i < everyImage.length; i++) {
+                console.log(everyImage[i]);
+                everyImage[i].style.height = firstImageHeight + "px";
+            }
+        }
 
         function refreshImages()
         {
@@ -100,6 +121,10 @@
 
                 images[i].src = urlArray[0] + "?cache=" + new Date().getTime();
             }
+
+            setTimeout(function() {
+                setDivHeights();
+            }, 100);
         }
 
         function closeModal()
