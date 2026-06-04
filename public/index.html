@@ -3,146 +3,146 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name=”apple-mobile-web-app-capable” content=”yes “>
-
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
         <script src="https://cdn.tailwindcss.com"></script>
-
         <title>Derry Traffic Cameras</title>
+        <style>
+            body { background-color: #0a0a0f; }
+            .card-label { background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%); }
+        </style>
     </head>
-    <body class="h-screen w-screen relative">
+    <body class="min-h-screen text-white">
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-MT6HJD3EL7"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-
             gtag('config', 'G-MT6HJD3EL7');
         </script>
 
-        <div class="flex flex-row flex-wrap" id="camera-wrap">
-            <div class="w-1/3 h-full bg-green-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3295.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-red-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3288.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-blue-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3293.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-green-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3292.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-red-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3294.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-blue-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3290.jpg">
-            </div>
-            <div class="w-1/3 h-full bg-green-500">
-                <img class="w-full h-full" src="https://cctv.trafficwatchni.com/3289.jpg">
-            </div>
-        </div>
-        <div id="modal" class="flex flex-row absolute h-screen w-screen top-0 left-0 hidden" style="background: rgba(255,255,255,0.75); padding: 16px;">
-            <div class="flex flex-col w-full h-full bg-white rounded-lg" style="padding: 32px;">
-                <div class="flex flex-row w-full items-center h-8 justify-between">
-                    <span id="modalTitle" class="">Camera Name</span>
-                    <div onClick="closeModal();" class="bg-black rounded-full w-8 h-8 text-center" style="padding-top: 2px;">
-                        <span class="text-white font-bold text-lg pt-1">X</span>
-                    </div>
+        <header class="border-b border-white/10 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-lg font-semibold tracking-tight">Derry Traffic Cameras</h1>
+                    <p class="text-gray-500 text-xs mt-0.5">Live feeds &mdash; refreshed every 2s</p>
                 </div>
-                <div id="modalImage" class="flex items-center justify-center w-full h-full mt-8 bg-no-repeat bg-contain bg-center" style="background-image: url('https://cctv.trafficwatchni.com/3286.jpg');">
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-sm text-gray-400">Live</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="px-4 py-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="camera-wrap"></div>
+        </main>
+
+        <!-- Modal -->
+        <div id="modal" style="display:none;background:rgba(0,0,0,0.92)" class="fixed inset-0 z-50 items-center justify-center p-3">
+            <div class="relative bg-gray-900 rounded-xl w-full h-full shadow-2xl overflow-hidden border border-white/10 flex flex-col">
+                <div class="flex items-center justify-between px-5 py-3 border-b border-white/10">
+                    <div class="flex items-center gap-2.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <h2 id="modalTitle" class="font-medium text-sm text-gray-100"></h2>
+                    </div>
+                    <button onclick="closeModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center text-gray-300 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="bg-black flex-1 flex items-center justify-center overflow-hidden">
+                    <img id="modalImage" class="max-w-full max-h-full object-contain block" src="" alt="">
                 </div>
             </div>
         </div>
     </body>
     <script>
-        let cameras = [
-            { "name": "Buncrana Road", "url": "https://cctv.trafficwatchni.com/3286.jpg"},
-            { "name": "Caw Roundabout", "url": "https://cctv.trafficwatchni.com/3287.jpg"},
-            { "name": "Strand Road", "url": "https://cctv.trafficwatchni.com/3295.jpg"},
-            { "name": "Craigavon Bridge", "url": "https://cctv.trafficwatchni.com/3288.jpg"},
-            { "name": "Greenhaw/Culmore Road", "url": "https://cctv.trafficwatchni.com/3293.jpg"},
-            { "name": "Strand Road", "url": "https://cctv.trafficwatchni.com/3292.jpg"},
-            { "name": "Rossdowney Road", "url": "https://cctv.trafficwatchni.com/3294.jpg"},
-            { "name": "Dales Corner", "url": "https://cctv.trafficwatchni.com/3290.jpg"},
-            { "name": "Culmore Roundabout", "url": "https://cctv.trafficwatchni.com/3289.jpg"},
-            { "name": "Belt Road", "url": "https://cctv.trafficwatchni.com/3285.jpg"},
-            // { "name": "Drumahoe", "url": "https://cctv.trafficwatchni.com/3291.jpg"},
-            { "name": "Ballykelly", "url": "https://cctv.trafficwatchni.com/3284.jpg"},
-            { "name": "Foyle Bridge", "url": "https://cctv.trafficwatchni.com/832-1.jpg"},
-            { "name": "Glenshane Pass", "url": "https://cctv.trafficwatchni.com/821-1.jpg"},
-            { "name": "Coleraine Mountain", "url": "https://cctv.trafficwatchni.com/3239-1.jpg"},
-            { "name": "Toome", "url": "https://cctv.trafficwatchni.com/3256.jpg"},
-            { "name": "Randalstown", "url": "https://cctv.trafficwatchni.com/3255.jpg"},
+        const cameras = [
+            { "name": "Buncrana Road",        "url": "https://cctv.trafficwatchni.com/3286.jpg" },
+            { "name": "Caw Roundabout",        "url": "https://cctv.trafficwatchni.com/3287.jpg" },
+            { "name": "Strand Road",           "url": "https://cctv.trafficwatchni.com/3295.jpg" },
+            { "name": "Craigavon Bridge",      "url": "https://cctv.trafficwatchni.com/3288.jpg" },
+            { "name": "Greenhaw/Culmore Road", "url": "https://cctv.trafficwatchni.com/3293.jpg" },
+            { "name": "Strand Road",           "url": "https://cctv.trafficwatchni.com/3292.jpg" },
+            { "name": "Rossdowney Road",       "url": "https://cctv.trafficwatchni.com/3294.jpg" },
+            { "name": "Dales Corner",          "url": "https://cctv.trafficwatchni.com/3290.jpg" },
+            { "name": "Culmore Roundabout",    "url": "https://cctv.trafficwatchni.com/3289.jpg" },
+            { "name": "Belt Road",             "url": "https://cctv.trafficwatchni.com/3285.jpg" },
+            // { "name": "Drumahoe",           "url": "https://cctv.trafficwatchni.com/3291.jpg" },
+            { "name": "Ballykelly",            "url": "https://cctv.trafficwatchni.com/3284.jpg" },
+            { "name": "Foyle Bridge",          "url": "https://cctv.trafficwatchni.com/832-1.jpg" },
+            { "name": "Glenshane Pass",        "url": "https://cctv.trafficwatchni.com/821-1.jpg" },
+            { "name": "Coleraine Mountain",    "url": "https://cctv.trafficwatchni.com/3239-1.jpg" },
+            { "name": "Toome",                 "url": "https://cctv.trafficwatchni.com/3256.jpg" },
+            { "name": "Randalstown",           "url": "https://cctv.trafficwatchni.com/3255.jpg" },
+            { "name": "Randalstown",           "url": "https://cctv.trafficwatchni.com/232.jpg" },
         ];
+
+        let currentModalIndex = null;
+        let modalInterval = null;
 
         function getImageUrl(url) {
             return "https://liveviewproxy.robcordner.workers.dev/img?u=" + encodeURIComponent(url) + "&t=" + Date.now();
         }
 
-        document.addEventListener("DOMContentLoaded", function()
-        {
-            let windowWidth = window.innerWidth;
-            let insertHTML = "";
-
-            // Calculations for image height when at various responsive levels
-            let fullWidthHeight = (windowWidth / 3) * (352/600);
-
-            cameras.forEach(function(element, index)
-            {
-                insertHTML += '<div onClick="openModal(' + index + ')" class="w-full md:w-1/2 xl:w-1/3 relative"><div class="bg-blue-900 w-full flex flex-row justify-center items-center" style="height: 32px; position: absolute; left: 0; top: 0; color: white; padding: 0.6% 2%;">' + element.name + '</div><img id="image" class="w-full h-auto" src="' + getImageUrl(element.url) + '"></div>';
-            })
-
-            document.getElementById('camera-wrap').innerHTML = insertHTML;
+        document.addEventListener("DOMContentLoaded", function () {
+            const wrap = document.getElementById('camera-wrap');
+            wrap.innerHTML = cameras.map((cam, i) => `
+                <div class="camera-card relative cursor-pointer rounded-lg overflow-hidden bg-gray-900 group" onclick="openModal(${i})">
+                    <img class="camera-img w-full h-auto block" src="${getImageUrl(cam.url)}" data-url="${encodeURIComponent(cam.url)}" alt="${cam.name}">
+                    <div class="card-label absolute bottom-0 left-0 right-0 px-3 py-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                        <span class="text-white text-sm font-medium drop-shadow">${cam.name}</span>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity duration-200 pointer-events-none">
+                        <span class="text-gray-200 text-xs">${cam.name}</span>
+                    </div>
+                </div>
+            `).join('');
         });
 
-        function setDivHeights() {
-            let firstImageHeight = document.getElementById('image').clientHeight;
-
-            let  everyImage = document.querySelectorAll("#image");
-
-            for (let i = 0; i < everyImage.length; i++) {
-                everyImage[i].style.height = firstImageHeight + "px";
-            }
+        function refreshGrid() {
+            document.querySelectorAll('.camera-img').forEach(img => {
+                img.src = getImageUrl(decodeURIComponent(img.dataset.url));
+            });
         }
 
-        function refreshImages()
-        {
-            let images = document.getElementsByTagName("img");
-
-            for (let i = 0; i < images.length; i++)
-            {
-                let url = new URL(images[i].src);
-
-                images[i].src = getImageUrl(url.searchParams.get("u"));
-            }
-
-            setTimeout(function() {
-                setDivHeights();
-            }, 500);
+        function refreshModal() {
+            if (currentModalIndex === null) return;
+            document.getElementById('modalImage').src = getImageUrl(cameras[currentModalIndex].url);
         }
 
-        function closeModal()
-        {
-            document.getElementById('modal').classList.add('hidden');
+        function openModal(index) {
+            currentModalIndex = index;
+            const cam = cameras[index];
+            document.getElementById('modalTitle').textContent = cam.name;
+            document.getElementById('modalImage').src = getImageUrl(cam.url);
+
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex';
+
+            if (modalInterval) clearInterval(modalInterval);
+            modalInterval = setInterval(refreshModal, 2000);
         }
 
-        function openModal(index)
-        {
-            let currentCamera = cameras[index];
-
-            window.scrollTo(0,0);
-
-            document.getElementById('modal').classList.remove('hidden');
-
-            document.getElementById('modalTitle').innerHTML = currentCamera.name;
-            document.getElementById('modalImage').style.backgroundImage = "url('" + getImageUrl(currentCamera.url) + "')";
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            clearInterval(modalInterval);
+            modalInterval = null;
+            currentModalIndex = null;
         }
 
-        setInterval(refreshImages, 2000);
+        document.getElementById('modal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        setInterval(refreshGrid, 2000);
     </script>
 </html>
